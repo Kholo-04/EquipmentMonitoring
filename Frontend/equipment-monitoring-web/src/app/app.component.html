@@ -88,7 +88,7 @@
       </form>
 
 
-      <div class="demo-credentials">
+      <!--<div class="demo-credentials">
 
         <span>
           Available System Accounts
@@ -106,7 +106,7 @@
           Role: Maintenance Manager
         </small>
 
-      </div>
+      </div>-->
 
     </div>
 
@@ -235,7 +235,7 @@
           </h1>
 
           <p>
-            Machine-learning assisted maintenance decision support
+            Predictive Maintenance and Equipment Monitoring Platform
           </p>
 
         </div>
@@ -288,12 +288,8 @@
           <div>
 
             <h2>
-              Dashboard
+              Operational Dashboard
             </h2>
-
-            <p>
-              Equipment monitoring and maintenance overview
-            </p>
 
           </div>
 
@@ -305,7 +301,7 @@
           <article class="stat-card">
 
             <span class="stat-label">
-              Registered Equipment
+              🏭 Registered Equipment
             </span>
 
             <strong>
@@ -322,7 +318,7 @@
           <article class="stat-card">
 
             <span class="stat-label">
-              Registered Users
+              👥 Registered Users
             </span>
 
             <strong>
@@ -339,7 +335,7 @@
           <article class="stat-card">
 
             <span class="stat-label">
-              High Priority Alerts
+              🚨 High Priority Alerts
             </span>
 
             <strong>
@@ -356,7 +352,7 @@
           <article class="stat-card">
 
             <span class="stat-label">
-              Total Predictions
+              📊 Total Predictions
             </span>
 
             <strong>
@@ -386,10 +382,10 @@
 
             <div class="chart-card">
 
-              <div class="chart-row">
+              <div class="metric-row danger">
 
                 <span>
-                  High Priority
+                  🔴 High Priority
                 </span>
 
                 <strong>
@@ -398,21 +394,10 @@
 
               </div>
 
-              <div class="progress-bar">
-
-                <div class="progress-red"
-                     [style.width.%]="
-             (dashboardMetrics.highPriorityPredictions /
-             dashboardMetrics.totalPredictions) * 100
-           ">
-                </div>
-
-              </div>
-
-              <div class="chart-row">
+              <div class="metric-row success">
 
                 <span>
-                  Low Priority
+                  🟢 Low Priority
                 </span>
 
                 <strong>
@@ -449,10 +434,10 @@
 
             <div class="chart-card">
 
-              <div class="chart-row">
+              <div class="metric-row success">
 
                 <span>
-                  Active Equipment
+                  🟢 Active Equipment
                 </span>
 
                 <strong>
@@ -461,22 +446,10 @@
 
               </div>
 
-              <div class="progress-bar">
-
-                <div class="progress-green"
-                     [style.width.%]="
-             (dashboardMetrics.activeEquipment /
-             dashboardMetrics.totalEquipment) * 100
-           ">
-                </div>
-
-              </div>
-
-
-              <div class="chart-row">
+              <div class="metric-row danger">
 
                 <span>
-                  Inactive Equipment
+                  🔴 Inactive Equipment
                 </span>
 
                 <strong>
@@ -516,13 +489,8 @@
           <div>
 
             <h2>
-              Equipment
+              Equipment Management
             </h2>
-
-            <p>
-              Equipment managed through SQL Server
-            </p>
-
           </div>
 
         </div>
@@ -696,7 +664,7 @@
 
                 </td>
 
-                <td>
+                <td class="action-buttons">
 
                   <button class="secondary-button"
                           (click)="startEditEquipment(item)">
@@ -741,10 +709,10 @@
               Machine Failure Prediction
             </h2>
 
-            <p>
+            <!--<p>
               Enter equipment operating values for Decision Tree
               analysis.
-            </p>
+            </p>-->
 
           </div>
 
@@ -1173,14 +1141,6 @@
 
             <div>
 
-              <span>
-                Total Users
-              </span>
-
-              <strong>
-                {{ userList.length }}
-              </strong>
-
             </div>
 
           </div>
@@ -1303,7 +1263,7 @@
 
                 </td>
 
-                <td>
+                <td class="action-buttons">
 
                   <button class="secondary-button"
                           (click)="startEditUser(user)">
@@ -1331,11 +1291,6 @@
 
           <br>
 
-          <p>
-            User management is fully integrated with
-            SQL Server and supports role-based access.
-          </p>
-
         </div>
 
       </section>
@@ -1353,10 +1308,6 @@
             <h2>
               Audit Trail
             </h2>
-
-            <p>
-              System activity log.
-            </p>
 
           </div>
 
@@ -1441,10 +1392,6 @@
             <h2>
               Notification History
             </h2>
-
-            <p>
-              Email notifications generated by the system.
-            </p>
 
           </div>
 
@@ -1531,11 +1478,6 @@
             <h2>
               Prediction History
             </h2>
-
-            <p>
-              Previous machine-learning prediction records
-            </p>
-
           </div>
 
 
@@ -1593,28 +1535,20 @@
 
           <div class="history-summary">
 
-            <div>
+            <!--<div>-->
 
-              <span>
+              <!--<span>
                 Saved Predictions
               </span>
 
               <strong>
                 {{ predictionHistory.length }}
-              </strong>
+              </strong>-->
 
-            </div>
+            <!--</div>-->
 
 
             <div>
-
-              <span>
-                Storage
-              </span>
-
-              <strong>
-                SQL Server Database
-              </strong>
 
             </div>
 
