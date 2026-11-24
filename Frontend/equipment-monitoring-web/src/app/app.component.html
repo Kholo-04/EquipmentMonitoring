@@ -1,0 +1,1754 @@
+@if (!isAuthenticated) {
+
+  <!-- LOGIN -->
+  <div class="login-page">
+
+    <div class="login-card">
+
+      <div class="login-brand-icon">
+        EM
+      </div>
+
+      <h1>
+        Equipment Monitoring
+      </h1>
+
+      <h2>
+        Preventative Maintenance Management System
+      </h2>
+
+      <p class="login-description">
+        Sign in to access equipment monitoring,
+        maintenance management and predictive
+        maintenance services.
+      </p>
+
+
+      <form
+        class="login-form"
+        (ngSubmit)="login()">
+
+        <div class="form-group">
+
+          <label for="username">
+            Username
+          </label>
+
+          <input
+            id="username"
+            name="username"
+            type="text"
+            autocomplete="username"
+            [(ngModel)]="username">
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="password">
+            Password
+          </label>
+
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            [(ngModel)]="password">
+
+        </div>
+
+
+        @if (loginError) {
+
+          <div class="error-message">
+
+            <strong>
+              Login unsuccessful.
+            </strong>
+
+            <span>
+              {{ loginError }}
+            </span>
+
+          </div>
+
+        }
+
+
+        <button
+          type="submit"
+          class="primary-button login-button">
+
+          Sign In
+
+        </button>
+
+      </form>
+
+
+      <div class="demo-credentials">
+
+        <span>
+          Available System Accounts
+        </span>
+
+        <strong>
+          Username: manager
+        </strong>
+
+        <strong>
+          Password: Demo&#64;2026
+        </strong>
+
+        <small>
+          Role: Maintenance Manager
+        </small>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}
+
+@else {
+
+  <!-- MAIN APPLICATION -->
+  <div class="app-shell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="brand">
+
+        <div class="brand-icon">
+          EM
+        </div>
+
+        <div>
+
+          <h2>
+            Equipment Monitoring
+          </h2>
+
+          <p>
+            Preventative Maintenance
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <nav class="nav-menu">
+
+        <button class="nav-item"
+                [class.active]="currentView === 'dashboard'"
+                (click)="currentView = 'dashboard'">
+
+          Dashboard
+
+        </button>
+
+
+        <button class="nav-item"
+                [class.active]="currentView === 'equipment'"
+                (click)="currentView = 'equipment'">
+
+          Equipment
+
+        </button>
+
+        @if (isAdministrator()) {
+
+        <button class="nav-item"
+                [class.active]="currentView === 'users'"
+                (click)="currentView = 'users'">
+
+          User Management
+
+        </button>
+
+        }
+
+        <button class="nav-item"
+                [class.active]="currentView === 'prediction'"
+                (click)="currentView = 'prediction'">
+
+          Failure Prediction
+
+        </button>
+
+
+        <button class="nav-item"
+                [class.active]="currentView === 'history'"
+                (click)="currentView = 'history'">
+
+          Prediction History
+
+        </button>
+
+        <button class="nav-item"
+                [class.active]="currentView === 'notifications'"
+                (click)="currentView = 'notifications'">
+
+          Notifications
+
+        </button>
+
+        <button class="nav-item"
+                [class.active]="currentView === 'audit'"
+                (click)="currentView = 'audit'">
+
+          Audit Trail
+
+        </button>
+
+      </nav>
+
+
+      <div class="sidebar-footer">
+
+        <span class="status-dot"></span>
+
+        Predictive Maintenance
+
+      </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <!-- HEADER -->
+      <header class="topbar">
+
+        <div>
+
+          <h1>
+            Integrated Smart Equipment Monitoring and
+            Preventative Maintenance Management System
+          </h1>
+
+          <p>
+            Machine-learning assisted maintenance decision support
+          </p>
+
+        </div>
+
+
+        <div class="header-actions">
+
+          <div class="user-details">
+
+            <strong>
+              {{ currentUser }}
+            </strong>
+
+            <span>
+              {{ currentRole }}
+            </span>
+
+          </div>
+
+
+          <div class="system-status">
+
+            <span class="status-dot"></span>
+
+            System Online
+
+          </div>
+
+
+          <button type="button"
+                  class="logout-button"
+                  (click)="logout()">
+
+            Logout
+
+          </button>
+
+        </div>
+
+      </header>
+
+
+      <!-- DASHBOARD -->
+      @if (currentView === 'dashboard') {
+
+      <section class="page-section">
+
+        <div class="page-heading">
+
+          <div>
+
+            <h2>
+              Dashboard
+            </h2>
+
+            <p>
+              Equipment monitoring and maintenance overview
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="stat-grid">
+
+          <article class="stat-card">
+
+            <span class="stat-label">
+              Registered Equipment
+            </span>
+
+            <strong>
+              {{ dashboardMetrics.totalEquipment }}
+            </strong>
+
+            <small>
+              Equipment stored in SQL Server
+            </small>
+
+          </article>
+
+
+          <article class="stat-card">
+
+            <span class="stat-label">
+              Registered Users
+            </span>
+
+            <strong>
+              {{ dashboardMetrics.totalUsers }}
+            </strong>
+
+            <small>
+              Active system users
+            </small>
+
+          </article>
+
+
+          <article class="stat-card">
+
+            <span class="stat-label">
+              High Priority Alerts
+            </span>
+
+            <strong>
+              {{ dashboardMetrics.highPriorityPredictions }}
+            </strong>
+
+            <small>
+              Maintenance action required
+            </small>
+
+          </article>
+
+
+          <article class="stat-card">
+
+            <span class="stat-label">
+              Total Predictions
+            </span>
+
+            <strong>
+              {{ dashboardMetrics.totalPredictions }}
+            </strong>
+
+            <small>
+              Stored prediction records
+            </small>
+
+          </article>
+
+        </div>
+
+
+        <div class="content-grid">
+
+          <article class="panel">
+
+            <span class="eyebrow">
+              PREDICTIONS
+            </span>
+
+            <h3>
+              Priority Distribution
+            </h3>
+
+            <div class="chart-card">
+
+              <div class="chart-row">
+
+                <span>
+                  High Priority
+                </span>
+
+                <strong>
+                  {{ dashboardMetrics.highPriorityPredictions }}
+                </strong>
+
+              </div>
+
+              <div class="progress-bar">
+
+                <div class="progress-red"
+                     [style.width.%]="
+             (dashboardMetrics.highPriorityPredictions /
+             dashboardMetrics.totalPredictions) * 100
+           ">
+                </div>
+
+              </div>
+
+              <div class="chart-row">
+
+                <span>
+                  Low Priority
+                </span>
+
+                <strong>
+                  {{ dashboardMetrics.lowPriorityPredictions }}
+                </strong>
+
+              </div>
+
+              <div class="progress-bar">
+
+                <div class="progress-green"
+                     [style.width.%]="
+             (dashboardMetrics.lowPriorityPredictions /
+             dashboardMetrics.totalPredictions) * 100
+           ">
+                </div>
+
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <article class="panel">
+
+            <span class="eyebrow">
+              EQUIPMENT STATUS
+            </span>
+
+            <h3>
+              Equipment Overview
+            </h3>
+
+            <div class="chart-card">
+
+              <div class="chart-row">
+
+                <span>
+                  Active Equipment
+                </span>
+
+                <strong>
+                  {{ dashboardMetrics.activeEquipment }}
+                </strong>
+
+              </div>
+
+              <div class="progress-bar">
+
+                <div class="progress-green"
+                     [style.width.%]="
+             (dashboardMetrics.activeEquipment /
+             dashboardMetrics.totalEquipment) * 100
+           ">
+                </div>
+
+              </div>
+
+
+              <div class="chart-row">
+
+                <span>
+                  Inactive Equipment
+                </span>
+
+                <strong>
+                  {{ dashboardMetrics.inactiveEquipment }}
+                </strong>
+
+              </div>
+
+              <div class="progress-bar">
+
+                <div class="progress-red"
+                     [style.width.%]="
+             (dashboardMetrics.inactiveEquipment /
+             dashboardMetrics.totalEquipment) * 100
+           ">
+                </div>
+
+              </div>
+
+            </div>
+
+          </article>
+        </div>
+
+      </section>
+
+      }
+
+
+      <!-- EQUIPMENT -->
+      @if (currentView === 'equipment') {
+
+      <section class="page-section">
+
+        <div class="page-heading">
+
+          <div>
+
+            <h2>
+              Equipment
+            </h2>
+
+            <p>
+              Equipment managed through SQL Server
+            </p>
+
+          </div>
+
+        </div>
+
+        <!-- CREATE EQUIPMENT -->
+
+        <div class="create-user-card">
+
+          <h3>
+            Create Equipment
+          </h3>
+
+          <div class="form-row">
+
+            <input type="text"
+                   placeholder="Equipment Name"
+                   [(ngModel)]="newEquipmentName">
+
+            <select [(ngModel)]="newEquipmentType">
+
+              <option>L</option>
+              <option>M</option>
+              <option>H</option>
+
+            </select>
+
+            <select [(ngModel)]="newEquipmentStatus">
+
+              <option>Active</option>
+              <option>Inactive</option>
+
+            </select>
+
+            <button class="primary-button"
+                    (click)="createEquipment()">
+
+              Create Equipment
+
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- EDIT EQUIPMENT -->
+        @if (editingEquipmentId !== null) {
+
+        <div class="create-user-card">
+
+          <h3>
+            Edit Equipment
+          </h3>
+
+          <div class="form-row">
+
+            <input type="text"
+                   [(ngModel)]="editEquipmentName">
+
+            <select [(ngModel)]="editEquipmentType">
+
+              <option>L</option>
+              <option>M</option>
+              <option>H</option>
+
+            </select>
+
+            <select [(ngModel)]="editEquipmentStatus">
+
+              <option>Active</option>
+              <option>Inactive</option>
+
+            </select>
+
+            <button class="primary-button"
+                    (click)="saveEquipment()">
+
+              Save Changes
+
+            </button>
+
+          </div>
+
+        </div>
+
+        }
+
+        <!-- EQUIPMENT TABLE -->
+
+        <div class="panel">
+
+          <table class="equipment-table">
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Equipment ID
+                </th>
+
+                <th>
+                  Equipment Name
+                </th>
+
+                <th>
+                  Type
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+                <th>
+                  Maintenance Status
+                </th>
+
+                <th>
+                  Action
+                </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              @for (
+              item of equipmentList;
+              track item.equipmentId
+              ) {
+
+              <tr>
+
+                <td>
+                  EQ-{{ item.equipmentId }}
+                </td>
+
+                <td>
+                  {{ item.equipmentName }}
+                </td>
+
+                <td>
+                  {{ item.equipmentType }}
+                </td>
+
+                <td>
+
+                  <span class="badge"
+                        [class.success]="item.status === 'Active'"
+                        [class.neutral]="item.status !== 'Active'">
+
+                    {{ item.status }}
+
+                  </span>
+
+                </td>
+
+                <td>
+
+                  @if (item.status === 'Active') {
+
+                  Up to date
+
+                  }
+                  @else {
+
+                  Not scheduled
+
+                  }
+
+                </td>
+
+                <td>
+
+                  <button class="secondary-button"
+                          (click)="startEditEquipment(item)">
+
+                    ✏ Edit
+
+                  </button>
+
+                  <button class="secondary-button danger-button"
+                          (click)="deleteEquipment(item.equipmentId)">
+
+                    🗑 Delete
+
+                  </button>
+
+                </td>
+
+              </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+      }
+
+      <!-- FAILURE PREDICTION -->
+      @if (currentView === 'prediction') {
+
+      <section class="page-section">
+
+        <div class="page-heading">
+
+          <div>
+
+            <h2>
+              Machine Failure Prediction
+            </h2>
+
+            <p>
+              Enter equipment operating values for Decision Tree
+              analysis.
+            </p>
+
+          </div>
+
+
+          <span class="model-badge">
+            Decision Tree
+          </span>
+
+        </div>
+
+
+        <div class="prediction-layout">
+
+          <!-- INPUT PANEL -->
+          <article class="panel">
+
+            <h3>
+              Operating Information
+            </h3>
+
+            <p class="helper-text">
+              All fields correspond to features used by the trained
+              AI4I predictive-maintenance model.
+            </p>
+
+
+            <form class="prediction-form">
+
+              <!-- Equipment Type -->
+              <div class="form-group">
+
+                <label for="type">
+                  Equipment Type
+                </label>
+
+                <select id="type"
+                        name="type"
+                        [(ngModel)]="predictionRequest.type">
+
+                  <option value="L">
+                    L - Low
+                  </option>
+
+                  <option value="M">
+                    M - Medium
+                  </option>
+
+                  <option value="H">
+                    H - High
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <!-- Temperatures -->
+              <div class="form-row">
+
+                <div class="form-group">
+
+                  <label for="airTemperature">
+                    Air Temperature (K)
+                  </label>
+
+                  <input id="airTemperature"
+                         name="airTemperature"
+                         type="number"
+                         step="0.1"
+                         required
+                         [(ngModel)]="
+                        predictionRequest.airTemperature
+                      ">
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <label for="processTemperature">
+                    Process Temperature (K)
+                  </label>
+
+                  <input id="processTemperature"
+                         name="processTemperature"
+                         type="number"
+                         step="0.1"
+                         required
+                         [(ngModel)]="
+                        predictionRequest.processTemperature
+                      ">
+
+                </div>
+
+              </div>
+
+
+              <!-- Speed and Torque -->
+              <div class="form-row">
+
+                <div class="form-group">
+
+                  <label for="rotationalSpeed">
+                    Rotational Speed (rpm)
+                  </label>
+
+                  <input id="rotationalSpeed"
+                         name="rotationalSpeed"
+                         type="number"
+                         min="1"
+                         required
+                         [(ngModel)]="
+                        predictionRequest.rotationalSpeed
+                      ">
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <label for="torque">
+                    Torque (Nm)
+                  </label>
+
+                  <input id="torque"
+                         name="torque"
+                         type="number"
+                         step="0.1"
+                         required
+                         [(ngModel)]="
+                        predictionRequest.torque
+                      ">
+
+                </div>
+
+              </div>
+
+
+              <!-- Tool Wear -->
+              <div class="form-group">
+
+                <label for="toolWear">
+                  Tool Wear (min)
+                </label>
+
+                <input id="toolWear"
+                       name="toolWear"
+                       type="number"
+                       min="0"
+                       required
+                       [(ngModel)]="
+                      predictionRequest.toolWear
+                    ">
+
+              </div>
+
+
+              <!-- Generate Button -->
+              <button type="button"
+                      class="primary-button"
+                      [disabled]="isPredicting"
+                      (click)="generatePrediction()">
+
+                @if (isPredicting) {
+
+                Analysing Equipment...
+
+                }
+                @else {
+
+                Generate Prediction
+
+                }
+
+              </button>
+
+
+              <!-- Prediction Error -->
+              @if (predictionError) {
+
+              <div class="error-message">
+
+                <strong>
+                  Prediction could not be completed.
+                </strong>
+
+                <span>
+                  {{ predictionError }}
+                </span>
+
+              </div>
+
+              }
+
+            </form>
+
+          </article>
+
+
+          <!-- RESULT PANEL -->
+          <article class="panel result-placeholder">
+
+            <span class="eyebrow">
+              ML PREDICTION
+            </span>
+
+            <h3>
+              Prediction Result
+            </h3>
+
+
+            @if (isPredicting) {
+
+            <div class="placeholder-icon">
+              ...
+            </div>
+
+            <p>
+              The Decision Tree model is analysing the equipment
+              operating values.
+            </p>
+
+            }
+
+
+            @else if (predictionResult) {
+
+            <div class="prediction-status"
+                 [class.failure]="
+                    predictionResult.failurePrediction
+                  "
+                 [class.no-failure]="
+                    !predictionResult.failurePrediction
+                  ">
+
+              {{ predictionResult.prediction }}
+
+            </div>
+
+
+            <div class="prediction-metrics">
+
+              <div class="metric-row">
+
+                <span>
+                  Failure Probability
+                </span>
+
+                <strong>
+                  {{
+                        predictionResult.failureProbability * 100
+                          | number:'1.0-2'
+                  }}%
+                </strong>
+
+              </div>
+
+
+              <div class="metric-row">
+
+                <span>
+                  No Failure Probability
+                </span>
+
+                <strong>
+                  {{
+                        predictionResult.noFailureProbability * 100
+                          | number:'1.0-2'
+                  }}%
+                </strong>
+
+              </div>
+
+
+              <div class="metric-row">
+
+                <span>
+                  Maintenance Priority
+                </span>
+
+                <strong>
+                  {{
+                        predictionResult.maintenancePriority
+                  }}
+                </strong>
+
+              </div>
+
+
+              <div class="metric-row">
+
+                <span>
+                  Model
+                </span>
+
+                <strong>
+                  {{ predictionResult.model }}
+                </strong>
+
+              </div>
+
+            </div>
+
+            }
+
+
+            @else {
+
+            <div class="placeholder-icon">
+              AI
+            </div>
+
+            <p>
+              Submit operating values to generate a
+              machine-failure prediction using the trained
+              Decision Tree model.
+            </p>
+
+            <div class="result-meta">
+
+              <span>
+                Model
+              </span>
+
+              <strong>
+                Decision Tree
+              </strong>
+
+            </div>
+
+            }
+
+          </article>
+
+        </div>
+
+      </section>
+
+      }
+      @if (currentView === 'users') {
+
+      <section class="page-section">
+
+        <div class="page-heading">
+
+          <div>
+
+            <h2>
+              User Management
+            </h2>
+
+            <p>
+              Administrator-only functionality.
+            </p>
+
+          </div>
+
+        </div>
+
+        <div class="panel">
+
+          <div class="create-user-card">
+
+            <h3>Create User</h3>
+
+            @if (userSuccessMessage) {
+
+            <div class="success-message">
+
+              {{ userSuccessMessage }}
+
+            </div>
+
+            }
+
+            <div class="form-row">
+
+              <input type="text"
+                     placeholder="Username"
+                     [(ngModel)]="newUsername">
+
+              <input type="password"
+                     placeholder="Password"
+                     [(ngModel)]="newPassword">
+
+              <input type="email"
+                     placeholder="Email Address"
+                     [(ngModel)]="newEmailAddress">
+
+              <select [(ngModel)]="newRole">
+
+                <option>
+                  Administrator
+                </option>
+
+                <option>
+                  Maintenance Manager
+                </option>
+
+                <option>
+                  Technician
+                </option>
+
+                <option>
+                  Supervisor
+                </option>
+
+                <option>
+                  Operator
+                </option>
+
+              </select>
+
+              <button class="primary-button"
+                      (click)="createUser()">
+
+                Create User
+
+              </button>
+
+            </div>
+
+          </div>
+
+          <div class="history-summary">
+
+            <div>
+
+              <span>
+                Total Users
+              </span>
+
+              <strong>
+                {{ userList.length }}
+              </strong>
+
+            </div>
+
+          </div>
+
+          @if (editingUserId !== null) {
+
+          <div class="create-user-card">
+
+            <h3>
+              Edit User
+            </h3>
+
+            <div class="form-row">
+
+              <select [(ngModel)]="editRole">
+
+                <option>
+                  Administrator
+                </option>
+
+                <option>
+                  Maintenance Manager
+                </option>
+
+                <option>
+                  Technician
+                </option>
+
+                <option>
+                  Supervisor
+                </option>
+
+                <option>
+                  Operator
+                </option>
+
+              </select>
+
+              <input type="email"
+                     placeholder="Email Address"
+                     [(ngModel)]="editEmailAddress">
+
+              <button class="primary-button"
+                      (click)="saveUser()">
+
+                Save Changes
+
+              </button>
+
+            </div>
+
+          </div>
+
+          }
+
+          <h3>
+            Available Users
+          </h3>
+
+          <table class="equipment-table">
+
+            <thead>
+
+              <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Email Address</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              @for (
+              user of userList;
+              track user.userId
+              ) {
+
+              <tr>
+
+                <td>
+                  {{ user.username }}
+                </td>
+
+                <td>
+
+                  <span class="role-badge"
+                        [class.role-admin]="
+      user.role === 'Administrator'
+    "
+                        [class.role-manager]="
+      user.role === 'Maintenance Manager'
+    "
+                        [class.role-supervisor]="
+      user.role === 'Supervisor'
+    "
+                        [class.role-technician]="
+      user.role === 'Technician'
+    "
+                        [class.role-operator]="
+      user.role === 'Operator'
+    ">
+
+                    {{ user.role }}
+
+                  </span>
+
+                </td>
+                <td>
+                  {{ user.emailAddress }}
+                </td>
+                <td>
+
+
+                  <span class="badge success">
+                    Active
+                  </span>
+
+                </td>
+
+                <td>
+
+                  <button class="secondary-button"
+                          (click)="startEditUser(user)">
+
+                    ✏ Edit
+
+                  </button>
+
+                  <button class="secondary-button danger-button"
+                          (click)="deleteUser(user.userId)">
+
+                    🗑 Delete
+
+                  </button>
+
+                </td>
+
+              </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+          <br>
+
+          <p>
+            User management is fully integrated with
+            SQL Server and supports role-based access.
+          </p>
+
+        </div>
+
+      </section>
+
+      }
+
+      @if (currentView === 'audit') {
+
+      <section class="page-section">
+
+        <div class="page-heading">
+
+          <div>
+
+            <h2>
+              Audit Trail
+            </h2>
+
+            <p>
+              System activity log.
+            </p>
+
+          </div>
+
+        </div>
+
+        <div class="panel">
+
+          <table class="equipment-table">
+
+            <thead>
+
+              <tr>
+
+                <th>Date</th>
+
+                <th>User</th>
+
+                <th>Action</th>
+
+                <th>Module</th>
+
+                <th>Description</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              @for (
+              audit of auditList;
+              track audit.auditLogId
+              ) {
+
+              <tr>
+
+                <td>
+                  {{
+                  audit.dateCreated
+                    | date:'dd MMM yyyy HH:mm'
+                  }}
+                </td>
+
+                <td>
+                  {{ audit.username }}
+                </td>
+
+                <td>
+                  {{ audit.action }}
+                </td>
+
+                <td>
+                  {{ audit.module }}
+                </td>
+
+                <td>
+                  {{ audit.description }}
+                </td>
+
+              </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+      }
+
+      @if (currentView === 'notifications') {
+
+      <section class="page-section">
+
+        <div class="page-heading">
+
+          <div>
+
+            <h2>
+              Notification History
+            </h2>
+
+            <p>
+              Email notifications generated by the system.
+            </p>
+
+          </div>
+
+        </div>
+
+        <div class="panel">
+
+          <table class="equipment-table">
+
+            <thead>
+
+              <tr>
+
+                <th>Date Sent</th>
+
+                <th>Recipient</th>
+
+                <th>Subject</th>
+
+                <th>Status</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              @for (
+              notification of notificationList;
+              track notification.notificationId
+              ) {
+
+              <tr>
+
+                <td>
+                  {{
+                  notification.dateSent
+                    | date:'dd MMM yyyy HH:mm'
+                  }}
+                </td>
+
+                <td>
+                  {{ notification.recipient }}
+                </td>
+
+                <td>
+                  {{ notification.subject }}
+                </td>
+
+                <td>
+
+                  <span class="badge success">
+
+                    {{ notification.status }}
+
+                  </span>
+
+                </td>
+
+              </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+      }
+
+
+      <!-- PREDICTION HISTORY -->
+      @if (currentView === 'history') {
+
+      <section class="page-section">
+
+        <div class="page-heading">
+
+          <div>
+
+            <h2>
+              Prediction History
+            </h2>
+
+            <p>
+              Previous machine-learning prediction records
+            </p>
+
+          </div>
+
+
+          @if (predictionHistory.length > 0) {
+
+          <button type="button"
+                  class="
+                  secondary-button
+                  danger-button
+                "
+                  (click)="clearPredictionHistory()">
+
+            Clear History
+
+          </button>
+
+          }
+
+        </div>
+
+
+        @if (predictionHistory.length === 0) {
+
+        <div class="panel empty-state">
+
+          <div class="placeholder-icon">
+            H
+          </div>
+
+          <h3>
+            No saved predictions yet
+          </h3>
+
+          <p>
+            Successful machine-failure predictions will
+            automatically appear here.
+          </p>
+
+          <button type="button"
+                  class="primary-button"
+                  (click)="currentView = 'prediction'">
+
+            Generate Prediction
+
+          </button>
+
+        </div>
+
+        }
+
+
+        @else {
+
+        <div class="panel history-panel">
+
+          <div class="history-summary">
+
+            <div>
+
+              <span>
+                Saved Predictions
+              </span>
+
+              <strong>
+                {{ predictionHistory.length }}
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <span>
+                Storage
+              </span>
+
+              <strong>
+                SQL Server Database
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="history-table-wrapper">
+
+            <table class="
+                    equipment-table
+                    history-table
+                  ">
+
+              <thead>
+
+                <tr>
+
+                  <th>Date</th>
+
+                  <th>Type</th>
+
+                  <th>Prediction</th>
+
+                  <th>
+                    Failure Probability
+                  </th>
+
+                  <th>Priority</th>
+
+                  <th>Model</th>
+
+                </tr>
+
+              </thead>
+
+
+              <tbody>
+
+                @for (
+                item of predictionHistory;
+                track item.predictionId
+                ) {
+
+                <tr>
+
+                  <td>
+                    {{
+                            item.createdDate
+                              | date:'dd MMM yyyy HH:mm'
+                    }}
+                  </td>
+
+
+                  <td>
+                    {{ item.type }}
+                  </td>
+
+
+                  <td>
+
+                    <span class="badge"
+                          [class.history-failure]="
+                              item.failurePrediction
+                            "
+                          [class.history-safe]="
+                              !item.failurePrediction
+                            ">
+
+                      @if (item.failurePrediction) {
+                      Failure Predicted
+                      }
+                      @else {
+                      No Failure
+                      }
+
+                    </span>
+
+                  </td>
+
+
+                  <td>
+                    {{
+                            item.failureProbability * 100
+                              | number:'1.0-2'
+                    }}%
+                  </td>
+
+
+                  <td>
+
+                    <span class="priority-badge"
+                          [class.priority-high]="
+                              item.maintenancePriority === 'High'
+                            "
+                          [class.priority-medium]="
+                              item.maintenancePriority === 'Medium'
+                            "
+                          [class.priority-low]="
+                              item.maintenancePriority === 'Low'
+                            ">
+
+                      {{
+                              item.maintenancePriority
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+                  <td>
+                    {{ item.modelName }}
+                  </td>
+
+                </tr>
+
+                }
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+        }
+
+      </section>
+
+      }
+
+    </main>
+
+  </div>
+
+}
